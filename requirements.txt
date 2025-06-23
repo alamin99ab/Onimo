@@ -1,6 +1,6 @@
-Flask
+flask
 langdetect
-deep-translator
+deep_translator
 wikipedia
 requests
-youtube-transcript-api
+youtube_transcript_api

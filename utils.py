@@ -10,7 +10,6 @@ from youtube_transcript_api import YouTubeTranscriptApi
 CREATOR_NAME = "Alamin"
 NEWS_API_KEY = "65e2964fd2d548eba7f26eaf17cbed75"
 supported_langs = ['en', 'bn']
-current_lang = 'en'
 
 def detect_language(text):
     try:
@@ -27,15 +26,12 @@ def translate_text(text, target_lang='en'):
 
 def is_detailed_query(query):
     cues = ["বিস্তারিত", "details", "full information", "সম্পূর্ণ তথ্য", "bistarito"]
-    query_lower = query.lower()
-    return any(word in query_lower for word in cues)
+    return any(cue in query.lower() for cue in cues)
 
 def extract_keywords(text):
     try:
         words = text.strip().split()
-        if len(words) >= 3:
-            return " ".join(words[:3])
-        return text
+        return " ".join(words[:3]) if len(words) >= 3 else text
     except:
         return text
 
@@ -55,23 +51,19 @@ def fetch_wikipedia_summary(query, lang='en', detailed=False):
 def fetch_latest_news(query, detailed=False):
     url = f"https://newsapi.org/v2/everything?q={quote(query)}&language=en&pageSize={3 if detailed else 1}&sortBy=publishedAt&apiKey={NEWS_API_KEY}"
     try:
-        response = requests.get(url)
-        data = response.json()
+        res = requests.get(url)
+        data = res.json()
         if data.get("status") == "ok" and data.get("articles"):
             article = data["articles"][0]
             title = article["title"]
             desc = article.get("description", "")
-            url = article["url"]
-            return f"{title}: {desc}", url
+            return f"{title}: {desc}", article["url"]
     except:
         return None, None
 
 def extract_youtube_id(url):
-    pattern = r"(?:v=|\/)([0-9A-Za-z_-]{11}).*"
-    match = re.search(pattern, url)
-    if match:
-        return match.group(1)
-    raise ValueError("Invalid YouTube URL.")
+    match = re.search(r"(?:v=|\/)([0-9A-Za-z_-]{11}).*", url)
+    return match.group(1) if match else None
 
 def get_transcript_flexible(video_id):
     try:
