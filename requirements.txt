@@ -1,12 +1,6 @@
 Flask
-flask-limiter
-python-dotenv
-requests
-wikipedia
-keybert
-spacy
-deep-translator
 langdetect
+deep-translator
+wikipedia
+requests
 youtube-transcript-api
-scikit-learn
-sentence-transformers
