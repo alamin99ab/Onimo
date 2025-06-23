@@ -4,6 +4,10 @@ from utils import *
 app = Flask(__name__)
 current_lang = 'en'
 
+@app.route("/")
+def home():
+    return "✅ Onimo AI Lite is Live on Render!"
+
 @app.route('/ask', methods=['POST'])
 def ask():
     global current_lang
@@ -94,12 +98,16 @@ def youtube_fact_check():
             "language": current_lang
         })
 
-    return jsonify({"status": "unknown", "message": translate_text("Couldn't fact check the video content.", target_lang=current_lang)})
+    return jsonify({
+        "status": "unknown",
+        "message": translate_text("Couldn't fact check the video content.", target_lang=current_lang)
+    })
 
 
 @app.route('/health')
 def health():
     return "Onimo AI Lite ✅ Running"
+
 
 if __name__ == "__main__":
     import os

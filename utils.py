@@ -49,21 +49,25 @@ def fetch_wikipedia_summary(query, lang='en', detailed=False):
         return None, None
 
 def fetch_latest_news(query, detailed=False):
-    url = f"https://newsapi.org/v2/everything?q={quote(query)}&language=en&pageSize={3 if detailed else 1}&sortBy=publishedAt&apiKey={NEWS_API_KEY}"
     try:
+        url = f"https://newsapi.org/v2/everything?q={quote(query)}&language=en&pageSize={3 if detailed else 1}&sortBy=publishedAt&apiKey={NEWS_API_KEY}"
         res = requests.get(url)
         data = res.json()
         if data.get("status") == "ok" and data.get("articles"):
             article = data["articles"][0]
-            title = article["title"]
+            title = article.get("title", "")
             desc = article.get("description", "")
-            return f"{title}: {desc}", article["url"]
+            return f"{title}: {desc}", article.get("url", "")
     except:
-        return None, None
+        pass
+    return None, None
 
 def extract_youtube_id(url):
-    match = re.search(r"(?:v=|\/)([0-9A-Za-z_-]{11}).*", url)
-    return match.group(1) if match else None
+    try:
+        match = re.search(r"(?:v=|\/)([0-9A-Za-z_-]{11}).*", url)
+        return match.group(1) if match else None
+    except:
+        return None
 
 def get_transcript_flexible(video_id):
     try:
