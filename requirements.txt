@@ -1,0 +1,12 @@
+Flask
+flask-limiter
+python-dotenv
+requests
+wikipedia
+keybert
+spacy
+deep-translator
+langdetect
+youtube-transcript-api
+scikit-learn
+sentence-transformers
